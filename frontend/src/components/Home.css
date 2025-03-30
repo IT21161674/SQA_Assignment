@@ -2,6 +2,55 @@
   min-height: 100vh;
 }
 
+/* Header Styles */
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  padding: 1rem 2rem;
+}
+
+.header-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-size: 1.5rem;
+  color: #6366f1;
+  margin: 0;
+}
+
+.cart-icon {
+  position: relative;
+  color: #1e293b;
+  transition: color 0.3s ease;
+}
+
+.cart-icon:hover {
+  color: #6366f1;
+}
+
+.cart-count {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: #6366f1;
+  color: white;
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 9999px;
+  min-width: 20px;
+  text-align: center;
+}
+
 /* Hero Section */
 .hero {
   background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
@@ -10,6 +59,7 @@
   text-align: center;
   position: relative;
   overflow: hidden;
+  margin-top: 60px;
 }
 
 .hero::before {
@@ -111,20 +161,41 @@
   font-size: 1.25rem;
 }
 
+.product-actions {
+  padding: 1rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.add-to-cart-button,
 .view-button {
-  display: block;
-  padding: 0.75rem 1rem;
-  margin: 1rem;
+  flex: 1;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
   text-align: center;
+}
+
+.add-to-cart-button {
   background-color: #6366f1;
   color: white;
+}
+
+.add-to-cart-button:hover {
+  background-color: #4f46e5;
+}
+
+.view-button {
+  background-color: #f1f5f9;
+  color: #1e293b;
   text-decoration: none;
-  border-radius: 6px;
-  transition: background-color 0.3s ease;
 }
 
 .view-button:hover {
-  background-color: #4f46e5;
+  background-color: #e2e8f0;
 }
 
 /* Categories Section */
@@ -152,6 +223,8 @@
   border-radius: 12px;
   overflow: hidden;
   aspect-ratio: 16/9;
+  text-decoration: none;
+  display: block;
 }
 
 .category-card img {
@@ -185,7 +258,6 @@
   padding: 0.75rem 1.5rem;
   background-color: white;
   color: #1e293b;
-  text-decoration: none;
   border-radius: 6px;
   opacity: 0;
   transition: opacity 0.3s ease;
@@ -213,5 +285,13 @@
   .products-grid,
   .categories-grid {
     grid-template-columns: 1fr;
+  }
+
+  .header {
+    padding: 0.75rem 1rem;
+  }
+
+  .logo {
+    font-size: 1.25rem;
   }
 } 
