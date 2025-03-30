@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import './Admin.css';
 
+const CATEGORIES = ['Electronics', 'Clothing', 'Books'];
+
 const Admin = () => {
   const [products, setProducts] = useState([]);
   const [formData, setFormData] = useState({
     name: '',
     price: '',
     description: '',
-    image: '',
     category: ''
   });
+  const [image, setImage] = useState(null);
   const [editingId, setEditingId] = useState(null);
 
   useEffect(() => {
@@ -34,26 +36,32 @@ const Admin = () => {
     }));
   };
 
+  const handleImageChange = (e) => {
+    setImage(e.target.files[0]);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      const formDataToSend = new FormData();
+      Object.keys(formData).forEach(key => {
+        formDataToSend.append(key, formData[key]);
+      });
+      if (image) {
+        formDataToSend.append('image', image);
+      }
+
       if (editingId) {
         // Update existing product
         await fetch(`http://localhost:5000/api/products/${editingId}`, {
           method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(formData),
+          body: formDataToSend,
         });
       } else {
         // Create new product
         await fetch('http://localhost:5000/api/products', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(formData),
+          body: formDataToSend,
         });
       }
       fetchProducts();
@@ -64,7 +72,13 @@ const Admin = () => {
   };
 
   const handleEdit = (product) => {
-    setFormData(product);
+    setFormData({
+      name: product.name,
+      price: product.price,
+      description: product.description,
+      category: product.category
+    });
+    setImage(null);
     setEditingId(product._id);
   };
 
@@ -86,9 +100,9 @@ const Admin = () => {
       name: '',
       price: '',
       description: '',
-      image: '',
       category: ''
     });
+    setImage(null);
     setEditingId(null);
   };
 
@@ -133,26 +147,33 @@ const Admin = () => {
         </div>
 
         <div className="form-group">
-          <label htmlFor="image">Image URL:</label>
-          <input
-            type="text"
-            id="image"
-            name="image"
-            value={formData.image}
-            onChange={handleInputChange}
-            required
-          />
-        </div>
-
-        <div className="form-group">
           <label htmlFor="category">Category:</label>
-          <input
-            type="text"
+          <select
             id="category"
             name="category"
             value={formData.category}
             onChange={handleInputChange}
             required
+            className="category-select"
+          >
+            <option value="">Select a category</option>
+            {CATEGORIES.map(category => (
+              <option key={category} value={category}>
+                {category}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="image">Product Image:</label>
+          <input
+            type="file"
+            id="image"
+            name="image"
+            onChange={handleImageChange}
+            accept="image/*"
+            required={!editingId}
           />
         </div>
 
@@ -173,7 +194,13 @@ const Admin = () => {
         <div className="products-grid">
           {products.map((product) => (
             <div key={product._id} className="product-card">
-              <img src={product.image} alt={product.name} />
+              <img 
+                src={`http://localhost:5000/api/products/${product._id}/image`}
+                alt={product.name}
+                onError={(e) => {
+                  e.target.src = 'https://via.placeholder.com/150?text=No+Image';
+                }}
+              />
               <h3>{product.name}</h3>
               <p>${product.price}</p>
               <p>{product.description}</p>
