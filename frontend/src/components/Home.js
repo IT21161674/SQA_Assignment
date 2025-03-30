@@ -43,8 +43,28 @@ const Home = () => {
     }
   ];
 
+  const handleAddToCart = (product) => {
+    // TODO: Implement cart functionality
+    console.log('Added to cart:', product);
+  };
+
   return (
     <div className="home">
+      {/* Header with Cart Icon */}
+      <header className="header">
+        <div className="header-content">
+          <h1 className="logo">ShopEase</h1>
+          <Link to="/cart" className="cart-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="9" cy="21" r="1"></circle>
+              <circle cx="20" cy="21" r="1"></circle>
+              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+            </svg>
+            <span className="cart-count">0</span>
+          </Link>
+        </div>
+      </header>
+
       {/* Hero Section */}
       <section className="hero">
         <div className="hero-content">
@@ -63,7 +83,17 @@ const Home = () => {
               <img src={product.image} alt={product.name} />
               <h3>{product.name}</h3>
               <p className="price">${product.price}</p>
-              <Link to={`/product/${product.id}`} className="view-button">View Details</Link>
+              <div className="product-actions">
+                <button 
+                  className="add-to-cart-button"
+                  onClick={() => handleAddToCart(product)}
+                >
+                  Add to Cart
+                </button>
+                <Link to={`/product/${product.id}`} className="view-button">
+                  View Details
+                </Link>
+              </div>
             </div>
           ))}
         </div>
@@ -74,11 +104,11 @@ const Home = () => {
         <h2>Shop by Category</h2>
         <div className="categories-grid">
           {categories.map(category => (
-            <div key={category.id} className="category-card">
+            <Link key={category.id} to={`/category/${category.id}`} className="category-card">
               <img src={category.image} alt={category.name} />
               <h3>{category.name}</h3>
-              <Link to={`/category/${category.id}`} className="explore-button">Explore</Link>
-            </div>
+              <span className="explore-button">Explore</span>
+            </Link>
           ))}
         </div>
       </section>
