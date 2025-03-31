@@ -1,34 +1,31 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import './CategoryPage.css';
 
 const CategoryPage = () => {
   const { categoryId } = useParams();
-  
-  // Sample data - replace with actual API call later
-  const categoryProducts = [
-    {
-      id: 1,
-      name: "Premium Wireless Headphones",
-      price: 199.99,
-      image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-      category: "Electronics"
-    },
-    {
-      id: 2,
-      name: "Smart Watch Pro",
-      price: 299.99,
-      image: "https://images.unsplash.com/photo-1579586337278-3befd40fd17a?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-      category: "Electronics"
-    },
-    {
-      id: 3,
-      name: "Wireless Earbuds",
-      price: 149.99,
-      image: "https://images.unsplash.com/photo-1572569511254-d8f925fe2cbb?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-      category: "Electronics"
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [categoryName, setCategoryName] = useState('');
+
+  useEffect(() => {
+    fetchProducts();
+  }, [categoryId]);
+
+  const fetchProducts = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/api/products');
+      const allProducts = await response.json();
+      // Filter products by category
+      const categoryProducts = allProducts.filter(product => product.category === categoryId);
+      setProducts(categoryProducts);
+      setCategoryName(categoryId);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching products:', error);
+      setLoading(false);
     }
-  ];
+  };
 
   const handleAddToCart = (product) => {
     // TODO: Implement cart functionality
@@ -37,27 +34,38 @@ const CategoryPage = () => {
 
   return (
     <div className="category-page">
-      <h1>Electronics</h1>
-      <div className="products-grid">
-        {categoryProducts.map(product => (
-          <div key={product.id} className="product-card">
-            <img src={product.image} alt={product.name} />
-            <h3>{product.name}</h3>
-            <p className="price">${product.price}</p>
-            <div className="product-actions">
-              <button 
-                className="add-to-cart-button"
-                onClick={() => handleAddToCart(product)}
-              >
-                Add to Cart
-              </button>
-              <button className="view-details-button">
-                View Details
-              </button>
+      <h1>{categoryName}</h1>
+      {loading ? (
+        <div className="loading">Loading...</div>
+      ) : (
+        <div className="products-grid">
+          {products.map(product => (
+            <div key={product._id} className="product-card">
+              <img 
+                src={`http://localhost:5000/api/products/${product._id}/image`}
+                alt={product.name}
+                onError={(e) => {
+                  e.target.src = 'https://via.placeholder.com/150?text=No+Image';
+                }}
+              />
+              <h3>{product.name}</h3>
+              <p className="price">${product.price}</p>
+              <p className="description">{product.description}</p>
+              <div className="product-actions">
+                <button 
+                  className="add-to-cart-button"
+                  onClick={() => handleAddToCart(product)}
+                >
+                  Add to Cart
+                </button>
+                <button className="view-details-button">
+                  View Details
+                </button>
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
