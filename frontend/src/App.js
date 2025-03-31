@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import Home from './components/Home';
 import CategoryPage from './components/CategoryPage';
 import Admin from './components/Admin';
+import Footer from './components/Footer';
 import './App.css';
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
           <Route path="/category/:categoryId" element={<CategoryPage />} />
           <Route path="/admin" element={<Admin />} />
         </Routes>
+        <Footer />
       </div>
     </Router>
   );
