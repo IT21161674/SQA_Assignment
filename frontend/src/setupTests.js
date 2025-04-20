@@ -3,3 +3,6 @@
 // expect(element).toHaveTextContent(/react/i)
 // learn more: https://github.com/testing-library/jest-dom
 import '@testing-library/jest-dom';
+
+// Selenium WebDriver setup
+process.env.PATH = `${process.env.PATH}:${process.cwd()}/node_modules/.bin`;
