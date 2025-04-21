@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import './Home.css';
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import "./Home.css";
 
 const Home = () => {
   const [featuredProducts, setFeaturedProducts] = useState([]);
@@ -12,38 +12,41 @@ const Home = () => {
 
   const fetchProducts = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/products');
+      const response = await fetch("http://localhost:5000/api/products");
       const products = await response.json();
       // Take only the first 3 products for featured section
       setFeaturedProducts(products.slice(0, 3));
       setLoading(false);
     } catch (error) {
-      console.error('Error fetching products:', error);
+      console.error("Error fetching products:", error);
       setLoading(false);
     }
   };
 
   const categories = [
     {
-      id: 'Electronics',
+      id: "Electronics",
       name: "Electronics",
-      image: "https://images.unsplash.com/photo-1498049794561-7780e7231661?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
+      image:
+        "https://images.unsplash.com/photo-1498049794561-7780e7231661?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
     },
     {
-      id: 'Clothing',
+      id: "Clothing",
       name: "Clothing",
-      image: "https://images.unsplash.com/photo-1445205170230-053b83016050?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
+      image:
+        "https://images.unsplash.com/photo-1445205170230-053b83016050?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
     },
     {
-      id: 'Books',
+      id: "Books",
       name: "Books",
-      image: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
-    }
+      image:
+        "https://images.unsplash.com/photo-1544947950-fa07a98d237f?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+    },
   ];
 
   const handleAddToCart = (product) => {
     // TODO: Implement cart functionality
-    console.log('Added to cart:', product);
+    console.log("Added to cart:", product);
   };
 
   return (
@@ -51,16 +54,18 @@ const Home = () => {
       <section className="hero-section">
         <h1>Welcome to Our Store</h1>
         <p>Discover amazing products at great prices</p>
-        <Link to="/category/1" className="cta-button">Shop Now</Link>
+        <Link to="/category/1" className="cta-button">
+          Shop Now
+        </Link>
       </section>
 
       <section className="categories-section">
         <h2>Shop by Category</h2>
         <div className="categories-grid">
-          {categories.map(category => (
-            <Link 
-              key={category.id} 
-              to={`/category/${category.id}`} 
+          {categories.map((category) => (
+            <Link
+              key={category.id}
+              to={`/category/${category.id}`}
               className="category-card"
             >
               <img src={category.image} alt={category.name} />
@@ -76,7 +81,7 @@ const Home = () => {
           <div className="loading">Loading...</div>
         ) : (
           <div className="products-grid">
-            {featuredProducts.map(product => (
+            {featuredProducts.map((product) => (
               <div key={product.id} className="product-card">
                 <img src={product.image} alt={product.name} />
                 <h3>{product.name}</h3>
@@ -91,4 +96,4 @@ const Home = () => {
   );
 };
 
-export default Home; 
+export default Home;

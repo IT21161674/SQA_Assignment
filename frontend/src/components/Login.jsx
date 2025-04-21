@@ -17,11 +17,16 @@ function Login() {
   const navigate = useNavigate();
 
   const handleLogin = async (values, { setSubmitting }) => {
+    console.log("clicked");
     try {
+      console.log("inside try catch");
       const user = await loginUser(values.email, values.password);
+      console.log("user");
       localStorage.setItem("user", JSON.stringify(user));
       navigate("/");
+      setLoginError("");
     } catch (error) {
+      console.log("error", error);
       setLoginError("Invalid email or password");
     } finally {
       setSubmitting(false);
@@ -51,7 +56,11 @@ function Login() {
                   className="form-control"
                   data-testid="email-input"
                 />
-                <ErrorMessage name="email" component="div" className="error-message" />
+                <ErrorMessage
+                  name="email"
+                  component="div"
+                  className="error-message"
+                />
               </div>
 
               <div className="form-group">
@@ -63,7 +72,11 @@ function Login() {
                   className="form-control"
                   data-testid="password-input"
                 />
-                <ErrorMessage name="password" component="div" className="error-message" />
+                <ErrorMessage
+                  name="password"
+                  component="div"
+                  className="error-message"
+                />
               </div>
 
               {loginError && <div className="error-message">{loginError}</div>}
@@ -78,7 +91,9 @@ function Login() {
               </button>
 
               <div className="login-footer">
-                <p>Don't have an account? <a href="/register">Create Account</a></p>
+                <p>
+                  Don't have an account? <a href="/register">Create Account</a>
+                </p>
               </div>
             </Form>
           )}

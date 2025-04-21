@@ -11,15 +11,15 @@ const saveUsers = () => {
 
 // Authentication state management
 const getCurrentUser = () => {
-  return JSON.parse(localStorage.getItem("currentUser")) || null;
+  return JSON.parse(localStorage.getItem("user")) || null;
 };
 
 const setCurrentUser = (user) => {
-  localStorage.setItem("currentUser", JSON.stringify(user));
+  localStorage.setItem("user", JSON.stringify(user));
 };
 
 const removeCurrentUser = () => {
-  localStorage.removeItem("currentUser");
+  localStorage.removeItem("user");
 };
 
 const isAuthenticated = () => {
@@ -56,7 +56,7 @@ export const loginUser = async (email, password) => {
 
   // Return user without password
   const { password: _, ...userWithoutPassword } = user;
-  setCurrentUser(userWithoutPassword);
+
   return userWithoutPassword;
 };
 
@@ -71,5 +71,5 @@ export default {
   loginUser,
   logout,
   getCurrentUser,
-  isAuthenticated
+  isAuthenticated,
 };

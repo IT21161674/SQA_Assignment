@@ -1,5 +1,5 @@
 .login-container {
-  min-height: 100vh;
+  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -117,4 +117,4 @@
   .login-header h1 {
     font-size: 1.75rem;
   }
-} 
+}

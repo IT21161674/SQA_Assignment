@@ -54,7 +54,7 @@
 /* Hero Section */
 .hero-section {
   background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-    url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+    url("https://images.unsplash.com/photo-1441986300917-64674bd600d8?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80");
   background-size: cover;
   background-position: center;
   height: 60vh;
@@ -223,6 +223,10 @@
   padding: 2rem;
 }
 
+.home-container {
+  flex: 1;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .home-container {
@@ -253,4 +257,4 @@
   .logo {
     font-size: 1.25rem;
   }
-} 
+}

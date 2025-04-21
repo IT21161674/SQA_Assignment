@@ -1,7 +1,6 @@
-// Change from CommonJS to ES Module imports
 import { Builder, By, until } from "selenium-webdriver";
-import { ServiceBuilder } from 'selenium-webdriver/chrome';
-import chromedriver from 'chromedriver';
+import { ServiceBuilder } from "selenium-webdriver/chrome";
+import chromedriver from "chromedriver";
 
 // Helper function to add delays
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -16,10 +15,10 @@ describe("Auth Flow Tests", () => {
     // Use ServiceBuilder with the ChromeDriver path for Windows compatibility
     const service = new ServiceBuilder(chromedriver.path);
     driver = await new Builder()
-      .forBrowser('chrome')
+      .forBrowser("chrome")
       .setChromeService(service)
       .build();
-      
+
     await driver.manage().window().maximize();
     await driver.manage().setTimeouts({
       implicit: 60000,
@@ -67,7 +66,7 @@ describe("Auth Flow Tests", () => {
 
     // Submit form
     const submitButton = await driver.wait(
-      until.elementLocated(By.css('.register-button')),
+      until.elementLocated(By.css('button[type="submit"]')),
       10000
     );
     await driver.wait(until.elementIsEnabled(submitButton));
@@ -103,7 +102,7 @@ describe("Auth Flow Tests", () => {
 
     // Submit form
     const loginButton = await driver.wait(
-      until.elementLocated(By.css('.login-button')),
+      until.elementLocated(By.css('button[type="submit"]')),
       10000
     );
     await driver.wait(until.elementIsEnabled(loginButton));
@@ -112,24 +111,38 @@ describe("Auth Flow Tests", () => {
 
     // Wait for redirect to home page and user info to load
     await driver.wait(until.urlIs(`${baseUrl}/`), 15000);
-    await driver.wait(until.elementLocated(By.css(".user-info h2")), 15000);
+    await driver.navigate().refresh();
     await delay(3000); // Extra wait for content to load
 
     // Verify user is logged in
     const welcomeText = await driver
-      .findElement(By.css(".user-info h2"))
+      .findElement(By.css(".hero-section h1"))
       .getText();
-    expect(welcomeText).toContain("Welcome, Test User");
-  }, 40000); // Increased timeout
+    expect(welcomeText).toContain("Welcome to Our Store");
+
+    // Wait for dashboard/homepage with logout button
+    const logoutBtn = await driver.wait(
+      until.elementLocated(By.css(".logout-btn")),
+      15000
+    );
+    await driver.wait(until.elementIsVisible(logoutBtn), 10000);
+
+    expect(await logoutBtn.getText()).toMatch(/logout/i);
+  }, 40000);
 
   it("should logout successfully", async () => {
-    await delay(2000); // Wait before starting logout
+    // Refresh the page before starting the test
+    driver.navigate().refresh();
+    await delay(2000); // Wait after refresh
 
     // Wait for logout button to be present and clickable
     const logoutButton = await driver.wait(
-      until.elementLocated(By.css("button.logout-btn")),
+      until.elementLocated(By.css(".logout-btn")),
       15000
     );
+
+    console.log(logoutButton);
+
     await driver.wait(until.elementIsVisible(logoutButton));
     await driver.wait(until.elementIsEnabled(logoutButton));
     await delay(actionDelay);
@@ -144,7 +157,7 @@ describe("Auth Flow Tests", () => {
     expect(currentUrl).toContain("/login");
   }, 40000); // Increased timeout
 
-  it("should show error for invalid login", async () => {
+  it("should show error message for invalid login credentials", async () => {
     await driver.get(`${baseUrl}/login`);
     await delay(2000); // Wait for page load
 
@@ -165,7 +178,7 @@ describe("Auth Flow Tests", () => {
 
     // Submit form
     const loginButton = await driver.wait(
-      until.elementLocated(By.css('.login-button')),
+      until.elementLocated(By.css('button[type="submit"]')),
       10000
     );
     await driver.wait(until.elementIsEnabled(loginButton));
