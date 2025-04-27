@@ -66,6 +66,8 @@ const Admin = () => {
       }
       fetchProducts();
       resetForm();
+      // Force a page refresh to ensure changes are visible
+      window.location.reload();
     } catch (error) {
       console.error('Error saving product:', error);
     }
@@ -89,6 +91,8 @@ const Admin = () => {
           method: 'DELETE',
         });
         fetchProducts();
+        // Force a page refresh to ensure changes are visible
+        window.location.reload();
       } catch (error) {
         console.error('Error deleting product:', error);
       }
@@ -166,14 +170,13 @@ const Admin = () => {
         </div>
 
         <div className="form-group">
-          <label htmlFor="image">Product Image:</label>
+          <label htmlFor="image">Product Image (Optional):</label>
           <input
             type="file"
             id="image"
             name="image"
             onChange={handleImageChange}
             accept="image/*"
-            required={!editingId}
           />
         </div>
 
@@ -195,11 +198,8 @@ const Admin = () => {
           {products.map((product) => (
             <div key={product._id} className="product-card">
               <img 
-                src={`http://localhost:5000/api/products/${product._id}/image`}
+                src={product.image ? `http://localhost:5000/api/products/${product._id}/image` : '/default.png'}
                 alt={product.name}
-                onError={(e) => {
-                  e.target.src = 'https://via.placeholder.com/150?text=No+Image';
-                }}
               />
               <h3>{product.name}</h3>
               <p>${product.price}</p>

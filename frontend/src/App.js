@@ -7,7 +7,6 @@ import Login from './components/Login';
 import Register from './components/Register';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
-import authService from './services/authService';
 import './App.css';
 
 // Protected Route component
@@ -20,29 +19,15 @@ function App() {
   return (
     <Router>
       <div className="App">
-        <Navbar />
-        <main className="main-content">
-          <Routes>
-            {/* Public routes */}
-            <Route path="/" element={<Home />} />
-            <Route path="/category/:categoryId" element={<CategoryPage />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            
-            {/* Protected routes */}
-            <Route
-              path="/admin"
-              element={
-                <ProtectedRoute>
-                  <Admin />
-                </ProtectedRoute>
-              }
-            />
-            
-            {/* Catch all route */}
-            <Route path="*" element={<Navigate to="/" />} />
-          </Routes>
-        </main>
+        <nav className="main-nav">
+          <Link to="/">Home</Link>
+          <Link to="/admin">Admin Panel</Link>
+        </nav>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/category/:categoryId" element={<CategoryPage />} />
+          <Route path="/admin" element={<Admin />} />
+        </Routes>
         <Footer />
       </div>
     </Router>
