@@ -38,11 +38,8 @@ const Products = () => {
             {products.map(product => (
               <div key={product._id} className="product-card">
                 <img 
-                  src={`http://localhost:5000/api/products/${product._id}/image`}
+                  src={product.image ? `http://localhost:5000/api/products/${product._id}/image` : '/default.png'}
                   alt={product.name}
-                  onError={(e) => {
-                    e.target.src = 'https://via.placeholder.com/150?text=No+Image';
-                  }}
                 />
                 <h3>{product.name}</h3>
                 <p className="price">${product.price}</p>
