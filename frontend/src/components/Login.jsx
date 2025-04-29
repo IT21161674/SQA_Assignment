@@ -17,6 +17,7 @@ function Login() {
   const navigate = useNavigate();
 
   const handleLogin = async (values, { setSubmitting }) => {
+    console.log("values", values)
     console.log("clicked");
     try {
       console.log("inside try catch");

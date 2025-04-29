@@ -24,7 +24,7 @@ function Navbar() {
     <nav className="navbar">
       <div className="navbar-container">
         <Link to="/" className="navbar-logo">
-          Your App Name
+          ShopEase
         </Link>
         <div className="nav-menu">
           <Link to="/" className="nav-item">
@@ -33,11 +33,10 @@ function Navbar() {
           <Link to="/category/1" className="nav-item">
             Categories
           </Link>
-          {isAuthenticated && (
             <Link to="/admin" className="nav-item">
               Admin
             </Link>
-          )}
+
           <div className="auth-buttons">
             {isAuthenticated ? (
               <button onClick={handleLogout} className="nav-item logout-btn">

@@ -40,10 +40,13 @@ const CategoryPage = () => {
       ) : (
         <div className="products-grid">
           {products.map(product => (
-            <div key={product._id} className="product-card">
+            <div key={product.id} className="product-card">
               <img 
-                src={product.image ? `http://localhost:5000/api/products/${product._id}/image` : '/default.png'}
+                src={product.imagePath ? `http://localhost:5000${product.imagePath}` : 'http://localhost:5000/default.svg'}
                 alt={product.name}
+                onError={(e) => {
+                  e.target.src = 'http://localhost:5000/default.svg';
+                }}
               />
               <h3>{product.name}</h3>
               <p className="price">${product.price}</p>

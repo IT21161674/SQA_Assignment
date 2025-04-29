@@ -1,0 +1,13 @@
+[
+  {
+    "id": "38edaa54-2ff1-47c8-811f-33028266dc06",
+    "name": "christmas sweater",
+    "price": 4200,
+    "description": "christmas sweater",
+    "category": "Clothing",
+    "createdAt": "2025-04-28T17:15:26.152Z",
+    "imagePath": "/api/products/images/38edaa54-2ff1-47c8-811f-33028266dc06.png",
+    "contentType": "image/png",
+    "updatedAt": "2025-04-28T17:53:59.814Z"
+  }
+]

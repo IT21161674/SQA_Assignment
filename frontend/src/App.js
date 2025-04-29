@@ -8,6 +8,7 @@ import Register from './components/Register';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import authService from './services/authService';
+import Products from './components/Products';
 import './App.css';
 
 // Protected Route component
@@ -28,14 +29,13 @@ function App() {
             <Route path="/category/:categoryId" element={<CategoryPage />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/products" element={<Products />} />
             
             {/* Protected routes */}
             <Route
               path="/admin"
               element={
-                <ProtectedRoute>
                   <Admin />
-                </ProtectedRoute>
               }
             />
             

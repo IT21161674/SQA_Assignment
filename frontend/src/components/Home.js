@@ -54,7 +54,7 @@ const Home = () => {
       <section className="hero-section">
         <h1>Welcome to Our Store</h1>
         <p>Discover amazing products at great prices</p>
-        <Link to="/category/1" className="cta-button">
+        <Link to="/products" className="cta-button">
           Shop Now
         </Link>
       </section>
@@ -83,10 +83,26 @@ const Home = () => {
           <div className="products-grid">
             {featuredProducts.map((product) => (
               <div key={product.id} className="product-card">
-                <img src={product.image} alt={product.name} />
+                <img
+                  src={product.imagePath ? `http://localhost:5000${product.imagePath}` : 'http://localhost:5000/default.svg'}
+                  alt={product.name}
+                  onError={(e) => {
+                    e.target.src = 'http://localhost:5000/default.svg';
+                  }}
+                />
                 <h3>{product.name}</h3>
                 <p className="price">${product.price}</p>
-                <button className="add-to-cart">Add to Cart</button>
+                <div className="product-actions">
+                  <button
+                    className="add-to-cart-button"
+                    onClick={() => handleAddToCart(product)}
+                  >
+                    Add to Cart
+                  </button>
+                  <Link to={`/product/${product.id}`} className="view-button">
+                    View Details
+                  </Link>
+                </div>
               </div>
             ))}
           </div>

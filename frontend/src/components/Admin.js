@@ -20,7 +20,9 @@ const Admin = () => {
 
   const fetchProducts = async () => {
     try {
+      console.log("Fetching products....")
       const response = await fetch('http://localhost:5000/api/products');
+      console.log("products: ", response)
       const data = await response.json();
       setProducts(data);
     } catch (error) {
@@ -81,7 +83,7 @@ const Admin = () => {
       category: product.category
     });
     setImage(null);
-    setEditingId(product._id);
+    setEditingId(product.id);
   };
 
   const handleDelete = async (id) => {
@@ -196,10 +198,13 @@ const Admin = () => {
         <h2>Current Products</h2>
         <div className="products-grid">
           {products.map((product) => (
-            <div key={product._id} className="product-card">
+            <div key={product.id} className="product-card">
               <img 
-                src={product.image ? `http://localhost:5000/api/products/${product._id}/image` : '/default.png'}
+                src={product.imagePath ? `http://localhost:5000${product.imagePath}` : 'http://localhost:5000/default.svg'}
                 alt={product.name}
+                onError={(e) => {
+                  e.target.src = 'http://localhost:5000/default.svg';
+                }}
               />
               <h3>{product.name}</h3>
               <p>${product.price}</p>
@@ -207,7 +212,7 @@ const Admin = () => {
               <p>Category: {product.category}</p>
               <div className="product-actions">
                 <button onClick={() => handleEdit(product)}>Edit</button>
-                <button onClick={() => handleDelete(product._id)}>Delete</button>
+                <button onClick={() => handleDelete(product.id)}>Delete</button>
               </div>
             </div>
           ))}
