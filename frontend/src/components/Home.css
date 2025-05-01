@@ -164,6 +164,9 @@
 /* Featured Products Section */
 .featured-products {
   margin-bottom: 3rem;
+  min-height: 60vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .featured-products h2 {
@@ -286,5 +289,149 @@
 
   .logo {
     font-size: 1.25rem;
+  }
+}
+
+/* Search Bar Styles */
+.search-container {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto 1.5rem;
+  position: relative;
+}
+
+.search-container form {
+  display: flex;
+  width: 100%;
+}
+
+.search-input {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 4px 0 0 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  outline: none;
+  width: 100%;
+}
+
+.search-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  cursor: pointer;
+  border-radius: 0 4px 4px 0;
+  font-weight: 600;
+  transition: background-color 0.3s;
+}
+
+.search-button:hover {
+  background-color: #0056b3;
+}
+
+@media (max-width: 768px) {
+  .search-container {
+    max-width: 90%;
+  }
+  
+  .search-input {
+    font-size: 0.9rem;
+    padding: 0.6rem 0.8rem;
+  }
+  
+  .search-button {
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* No Results Message */
+.no-results-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  flex: 1;
+  min-height: 50vh;
+  padding: 2rem 0;
+}
+
+.no-results {
+  text-align: center;
+  padding: 2rem;
+  width: 100%;
+  max-width: 600px;
+  background-color: transparent;
+  border-radius: 0;
+  box-shadow: none;
+  margin: 0 auto;
+}
+
+.no-results-icon {
+  margin: 0 auto 1.5rem;
+  color: #6c757d;
+  display: flex;
+  justify-content: center;
+}
+
+.no-results h3 {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  color: #343a40;
+}
+
+.no-results p {
+  font-size: 1.2rem;
+  margin-bottom: 1.5rem;
+  color: #6c757d;
+}
+
+.no-results-suggestions {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin: 1.5rem auto;
+  text-align: left;
+  max-width: 90%;
+}
+
+.no-results-suggestions ul {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+  margin-bottom: 0;
+  display: inline-block;
+  text-align: left;
+}
+
+.no-results-suggestions li {
+  margin-bottom: 0.5rem;
+  color: #6c757d;
+}
+
+.no-results .cta-button {
+  margin-top: 1.5rem;
+  padding: 0.75rem 1.5rem;
+  background-color: #007bff;
+  font-size: 1rem;
+  display: inline-block;
+}
+
+@media (max-width: 768px) {
+  .no-results {
+    padding: 1.5rem;
+  }
+  
+  .no-results h3 {
+    font-size: 1.5rem;
+  }
+  
+  .no-results p {
+    font-size: 1rem;
+  }
+  
+  .no-results-suggestions {
+    padding: 1rem;
   }
 } 

@@ -50,15 +50,15 @@ describe("Product Management Tests", () => {
     try {
       await driver.get(`${baseUrl}/admin`);
       await delay(1000);
-      
+
       const categorySelect = await driver.wait(until.elementLocated(By.name("category")), 5000);
       await categorySelect.click();
       await delay(actionDelay);
-      
+
       await categorySelect.sendKeys("Books");
       await categorySelect.sendKeys(Key.ENTER);
       await delay(actionDelay);
-      
+
       try {
         const testImagePath = path.resolve(__dirname, "../../../public/test-image.svg");
         if (fs.existsSync(testImagePath)) {
@@ -117,11 +117,11 @@ describe("Product Management Tests", () => {
 
       const productCards = await driver.findElements(By.css(".product-card"));
       let found = false;
-      
+
       for (const card of productCards) {
         const nameElement = await card.findElement(By.css("h3"));
         const productName = await nameElement.getText();
-        
+
         if (productName === testProductName) {
           found = true;
           const editButton = await card.findElement(By.css("button:nth-child(1)"));
@@ -130,7 +130,7 @@ describe("Product Management Tests", () => {
 
           const currentUrl = await driver.getCurrentUrl();
           testProductId = currentUrl.split("id=")[1];
-          
+
           try {
             await driver.executeScript(`
               const cancelButton = document.querySelector('button[type="button"]');
@@ -148,7 +148,7 @@ describe("Product Management Tests", () => {
             await driver.get(`${baseUrl}/admin`);
             await delay(1000);
           }
-          
+
           break;
         }
       }
@@ -165,7 +165,7 @@ describe("Product Management Tests", () => {
     try {
       await driver.get(`${baseUrl}/admin`);
       await delay(1000);
-      
+
       await driver.executeAsyncScript(`
         const callback = arguments[arguments.length - 1];
         const formData = new FormData();
@@ -190,7 +190,7 @@ describe("Product Management Tests", () => {
           testProductId = result.productId;
         }
       });
-      
+
       await driver.navigate().refresh();
       await delay(1000);
 
@@ -208,9 +208,9 @@ describe("Product Management Tests", () => {
         }
         return false;
       `);
-      
+
       await delay(1000);
-      
+
       await driver.executeScript(`
         function setNativeValue(element, value) {
           const valueSetter = Object.getOwnPropertyDescriptor(element, 'value').set;
@@ -244,11 +244,11 @@ describe("Product Management Tests", () => {
           }
         }, 500);
       `);
-      
+
       await delay(3000);
       await driver.navigate().refresh();
       await delay(1000);
-      
+
       const productUpdated = await driver.executeScript(`
         const cards = document.querySelectorAll(".product-card");
         for (const card of cards) {
@@ -259,7 +259,7 @@ describe("Product Management Tests", () => {
         }
         return false;
       `);
-      
+
       expect(productUpdated).toBe(true);
     } catch (error) {
       console.error("Error in edit product test:", error.message);
@@ -294,17 +294,17 @@ describe("Product Management Tests", () => {
             callback({success: false, error: err.message});
           });
         `);
-        
+
         if (result.success) {
           testProductId = result.productId;
         }
-        
+
         await driver.navigate().refresh();
         await delay(1000);
       }
 
       await driver.executeScript("window.confirm = function() { return true; }");
-      
+
       const productDeleted = await driver.executeScript(`
         const cards = document.querySelectorAll(".product-card");
         for (const card of cards) {
@@ -319,11 +319,11 @@ describe("Product Management Tests", () => {
         }
         return false;
       `);
-      
+
       await delay(2000);
       await driver.navigate().refresh();
       await delay(1000);
-      
+
       const productFound = await driver.executeScript(`
         const cards = document.querySelectorAll(".product-card");
         for (const card of cards) {
@@ -334,7 +334,7 @@ describe("Product Management Tests", () => {
         }
         return false;
       `);
-      
+
       expect(productFound).toBe(false);
     } catch (error) {
       console.error("Error in delete product test:", error.message);
@@ -355,7 +355,7 @@ describe("Product Management Tests", () => {
         document.querySelector('select[name="category"]').selectedIndex = 0;
       `);
       await delay(actionDelay);
-      
+
       const submitButton = await driver.findElement(By.css('form button[type="submit"]'));
       await submitButton.click();
       await delay(1000);
@@ -370,4 +370,141 @@ describe("Product Management Tests", () => {
       throw error;
     }
   }, 30000);
-}); 
+
+  // Test case for searching products
+  it("should search for products correctly", async () => {
+    try {
+      await driver.get(baseUrl);
+      await delay(2000);
+
+      const uniqueProductName = `Search Test ${Date.now()}`;
+      
+      const createResult = await driver.executeAsyncScript(`
+        const callback = arguments[arguments.length - 1];
+        
+        const formData = new FormData();
+        formData.append('name', '${uniqueProductName}');
+        formData.append('price', '49.99');
+        formData.append('description', 'This is a special product for search testing');
+        formData.append('category', 'Electronics');
+        
+        fetch('http://localhost:5000/api/products', {
+          method: 'POST',
+          body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+          callback({success: true, productId: data.id});
+        })
+        .catch(err => {
+          callback({success: false, error: err.message});
+        });
+      `);
+      
+      if (createResult.success) {
+        console.log(`Created test product with ID: ${createResult.productId}`);
+      } else {
+        console.error(`Failed to create test product: ${createResult.error}`);
+        throw new Error("Failed to create test product for search");
+      }
+      
+      await delay(2000);
+      
+      console.log(`Searching for unique product: "${uniqueProductName}"`);
+      
+      const searchInput = await driver.findElement(By.css('input[type="search"], input[placeholder*="search"], input.search-input'));
+      await searchInput.clear();
+      await searchInput.sendKeys(uniqueProductName);
+      await searchInput.sendKeys(Key.ENTER);
+      
+      await delay(3000);
+
+      const foundProduct = await driver.executeScript(`
+        const cards = document.querySelectorAll(".product-card h3");
+        for (const card of cards) {
+          if (card.textContent.includes("${uniqueProductName}")) {
+            return true;
+          }
+        }
+        return false;
+      `);
+      
+      console.log(`Product found in search results: ${foundProduct}`);
+      expect(foundProduct).toBe(true);
+      
+      console.log("Searching for non-existent product");
+      
+      await driver.get(baseUrl);
+      await delay(2000);
+      
+      const newSearchInput = await driver.findElement(By.css('input[type="search"], input[placeholder*="search"], input.search-input'));
+      
+      await newSearchInput.clear();
+      const randomQuery = `NonExistentProduct${Math.floor(Math.random() * 10000)}`;
+      await newSearchInput.sendKeys(randomQuery);
+      await newSearchInput.sendKeys(Key.ENTER);
+      
+      await delay(3000);
+      
+      const noResultsMessage = await driver.executeScript(`
+        const noResultsHeader = document.querySelector("h3");
+        return noResultsHeader && noResultsHeader.textContent.includes("No products found");
+      `);
+      
+      console.log(`"No products found" message displayed: ${noResultsMessage}`);
+      expect(noResultsMessage).toBe(true);
+      
+      const searchTermDisplayed = await driver.executeScript(`
+        const paragraph = document.querySelector("p");
+        return paragraph && paragraph.textContent.includes("${randomQuery}");
+      `);
+      
+      console.log(`Search term displayed in message: ${searchTermDisplayed}`);
+      expect(searchTermDisplayed).toBe(true);
+      
+      console.log("Testing 'Return to Home' button");
+      
+      const returnButton = await driver.findElement(By.linkText("Return to Home"));
+      await returnButton.click();
+      
+      await delay(2000); // Wait for navigation
+      
+      // Verify we're back on the home page
+      const homePageCheck = await driver.executeScript(`
+        return {
+          isHomePage: document.title.includes("Home") || 
+                     document.querySelectorAll(".product-card").length > 0,
+          productCount: document.querySelectorAll(".product-card").length
+        };
+      `);
+      
+      console.log(`Back on home page: ${homePageCheck.isHomePage}`);
+      console.log(`Number of products visible: ${homePageCheck.productCount}`);
+      
+      expect(homePageCheck.isHomePage).toBe(true);
+      expect(homePageCheck.productCount).toBeGreaterThan(0);
+      
+      // Clean up: Delete the test product
+      if (createResult.productId) {
+        console.log(`Cleaning up: Deleting test product with ID ${createResult.productId}`);
+        await driver.executeAsyncScript(`
+          const callback = arguments[arguments.length - 1];
+          
+          fetch('http://localhost:5000/api/products/${createResult.productId}', {
+            method: 'DELETE'
+          })
+          .then(() => {
+            callback({success: true});
+          })
+          .catch(err => {
+            callback({success: false, error: err.message});
+          });
+        `);
+      }
+      
+    } catch (error) {
+      console.error("Error in search products test:", error.message);
+      throw error;
+    }
+  }, 60000);
+});

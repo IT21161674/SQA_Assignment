@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./Home.css";
 
 const Home = () => {
   const [featuredProducts, setFeaturedProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchProducts();
@@ -20,6 +22,13 @@ const Home = () => {
     } catch (error) {
       console.error("Error fetching products:", error);
       setLoading(false);
+    }
+  };
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/products?search=${encodeURIComponent(searchQuery)}`);
     }
   };
 
@@ -54,6 +63,22 @@ const Home = () => {
       <section className="hero-section">
         <h1>Welcome to Our Store</h1>
         <p>Discover amazing products at great prices</p>
+        
+        <div className="search-container">
+          <form onSubmit={handleSearch}>
+            <input
+              type="text"
+              className="search-input"
+              placeholder="Search for products..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+            <button type="submit" className="search-button">
+              Search
+            </button>
+          </form>
+        </div>
+        
         <Link to="/products" className="cta-button">
           Shop Now
         </Link>
